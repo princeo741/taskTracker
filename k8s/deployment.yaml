@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-tracker-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: task-tracker
+  template:
+    metadata:
+      labels:
+        app: task-tracker
+    spec:
+      containers:
+      - name: task-tracker
+        image: task-tracker:latest
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - mountPath: /mnt/shared_storage
+          name: task-storage
+      volumes:
+      - name: task-storage
+        persistentVolumeClaim:
+          claimName: task-tracker-pvc
